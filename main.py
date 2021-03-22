@@ -1,9 +1,26 @@
-import tensorflow as tf
-from preprocess.preprocess import Preprocess
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    UCF11 = Preprocess('UCF11_updated_mpg')
-    if UCF11.should_do_preprocess():
-        UCF11.preprocess()
+import process_data
+import train_model
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+def select_dataset(dataset: str) -> str:
+    """
+    :param dataset: choose from 'UCF11', 'HMDB51', 'UCF101'
+    :return: dataset folder
+    """
+    dataset_path = './data/'
+    dataset_folder = {
+        'UCF11': 'UCF11_updated_mpg/',
+        'HMDB51': 'hmdb51_org/',
+        'UCF101': 'UCF-101/'
+    }
+    return dataset_path + dataset_folder[dataset]
+
+
+def main(dataset: str):
+    dataset_path = select_dataset(dataset)
+    train_ds, val_ds, test_ds = process_data.create_dataset(dataset_path, dataset)
+    train_model.train_convlstm(train_ds, val_ds)
+
+
+if __name__ == '__main__':
+    main('UCF11')
