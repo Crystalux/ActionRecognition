@@ -19,7 +19,11 @@ def select_dataset(dataset: str) -> str:
 def main(dataset: str):
     dataset_path = select_dataset(dataset)
     train_ds, val_ds, test_ds = process_data.create_dataset(dataset_path, dataset)
-    train_model.train_convlstm(train_ds, val_ds)
+    # train_model.train_resnet_lstm(train_ds, val_ds)
+    # takes 2.5 hours
+    # train_model.train_convlstm(train_ds, val_ds)
+
+    train_model.train_3dcnn_lstm(train_ds, val_ds)
 
 
 if __name__ == '__main__':

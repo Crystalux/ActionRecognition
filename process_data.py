@@ -50,10 +50,16 @@ def video_to_array(path):
         if not ret:
             continue
         if fn in frame_list:
-            # change frame to RGB and append to frames
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             # frames fixed to 224x244, ignoring aspect ratio
             frame = cv2.resize(frame, (settings.NUM_SIZE, settings.NUM_SIZE))
+
+            # change frame to RGB and append to frames
+            if settings.NUM_CHANNELS == 3:
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            else:
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                frame = frame[:, :, np.newaxis]
+
             arr = np.asarray(frame)
             norm_arr = (arr / 255).astype(np.float32)
             vid_frames.append(norm_arr)
