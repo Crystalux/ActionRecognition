@@ -19,7 +19,7 @@ def create_path_pd(dataset_path):
     for category in categories:
         for root, dirs, files in os.walk(dataset_path + '/' + category):
             for file in files:
-                if file.endswith('.mpg'):
+                if file.endswith('.mpg') or file.endswith('.avi'):
                     path = os.path.join(root, file)
                     path = re.compile(r"[\/]").split(path)
                     # join the path using the correct slash symbol:
@@ -84,7 +84,6 @@ def mapping_func(path, label):
 def create_dataset(dataset_path, data_name):
     categories, df = create_path_pd(dataset_path)
     settings.NUM_CLASSES = len(categories)
-
     print('Removing files due to insufficient frames\n')
     for path in tqdm(df['path']):
         if remove_video(path):
@@ -99,8 +98,10 @@ def create_dataset(dataset_path, data_name):
     transformed_label = label_ecoder.fit_transform(labels)
     label_cat = keras.utils.to_categorical(transformed_label, num_classes=settings.NUM_CLASSES)
 
-    X_train, X_test, y_train, y_test = train_test_split(file_paths, label_cat, test_size=0.2, shuffle=True)
-    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25, shuffle=True)
+    X_train, X_test, y_train, y_test = train_test_split(file_paths, label_cat, test_size=0.2,
+                                                        shuffle=True, random_state=128)
+    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25,
+                                                      shuffle=True, random_state=42)
 
     train_ds = tf.data.Dataset.from_tensor_slices((X_train, y_train))
     train_ds = train_ds.map(mapping_func).batch(settings.BATCH_SIZE)

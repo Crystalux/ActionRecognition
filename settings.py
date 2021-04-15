@@ -12,7 +12,7 @@ def init():
     global IMAGE_SHAPE
     global BUFFER_SIZE
 
-    NUM_SIZE = 128
+    NUM_SIZE = 224
     NUM_CHANNELS = 3
     N_FRAMES = 10
     BATCH_SIZE = 16

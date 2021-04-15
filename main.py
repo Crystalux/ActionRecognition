@@ -1,5 +1,7 @@
 import process_data
 import train_model
+import process_data
+import test_models
 
 
 def select_dataset(dataset: str) -> str:
@@ -16,15 +18,13 @@ def select_dataset(dataset: str) -> str:
     return dataset_path + dataset_folder[dataset]
 
 
-def main(dataset: str):
+def run_cnn3d_lstm(dataset: str):
     dataset_path = select_dataset(dataset)
     train_ds, val_ds, test_ds = process_data.create_dataset(dataset_path, dataset)
-    # train_model.train_resnet_lstm(train_ds, val_ds)
-    # takes 2.5 hours
-    # train_model.train_convlstm(train_ds, val_ds)
-
-    train_model.train_3dcnn_lstm(train_ds, val_ds)
+    train_model.train_3dcnn_lstm(train_ds, val_ds, dataset)
+    test_models.test_3dcnn_lstm(test_ds, './models/3dCNN_LSTM ' + dataset + '.h5')
 
 
 if __name__ == '__main__':
-    main('UCF11')
+    run_cnn3d_lstm('UCF11')
+
