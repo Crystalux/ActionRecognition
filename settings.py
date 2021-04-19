@@ -9,7 +9,7 @@ def init():
     global BATCH_SIZE
     global EPOCHS
     global TENSOR_SHAPE
-    global IMAGE_SHAPE
+    global OPTIC_SHAPE
     global BUFFER_SIZE
 
     NUM_SIZE = 224
@@ -18,8 +18,8 @@ def init():
     BATCH_SIZE = 16
     EPOCHS = 50
     TENSOR_SHAPE = tf.TensorShape([N_FRAMES, NUM_SIZE, NUM_SIZE, NUM_CHANNELS])
-    IMAGE_SHAPE = tf.TensorShape([NUM_SIZE, NUM_SIZE, NUM_CHANNELS])
-    NUM_CLASSES = None
+    OPTIC_SHAPE = tf.TensorShape([N_FRAMES, NUM_SIZE, NUM_SIZE])
+    NUM_CLASSES = 11
     BUFFER_SIZE = 6000
 
 
