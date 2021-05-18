@@ -223,7 +223,7 @@ def map_rgb_opt(path, label):
     [rgb_frames, opt_frames, ] = tf.py_function(func=rgb_and_optical, inp=[path], Tout=[tf.float32, tf.float32])
     rgb_frames.set_shape(settings.TENSOR_SHAPE)
     opt_frames.set_shape(settings.TENSOR_SHAPE)
-    return rgb_frames, opt_frames, label
+    return {'rgb': rgb_frames, 'optical': opt_frames}, label
 
 # def mapping_write_fn(path, label):
 #     return tf.io.serialize_tensor(path), label
@@ -231,7 +231,7 @@ def map_rgb_opt(path, label):
 
 def create_dataset(dataset_path, data_name):
     categories, df = create_path_pd(dataset_path)
-    # settings.NUM_CLASSES = len(categories)
+    settings.NUM_CLASSES = len(categories)
     print('Removing files due to insufficient frames\n')
     for path in tqdm(df['path']):
         if remove_video(path):
